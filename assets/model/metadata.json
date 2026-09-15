@@ -1,0 +1,605 @@
+{
+ "label": "a4_r4_22_22_6_6",
+ "checkpoint": "/mnt/data_nvme3/yczhao_secondary/dgx_data_shaoxiang/code_flume2d/runs/tucker_20260819/a4_r4_22_22_6_6/best.pt",
+ "checkpoint_epoch": 84,
+ "validation_macro_rmse": 0.5374781688054403,
+ "dtype": "float16",
+ "model": {
+  "modes": [
+   12,
+   12
+  ],
+  "width": 48,
+  "layers": 4,
+  "input_channels": 24,
+  "output_channels": 5,
+  "version": 2,
+  "norm": "instance",
+  "padding": 0
+ },
+ "tucker": {
+  "ranks": [
+   4,
+   22,
+   22,
+   6,
+   6
+  ],
+  "core_shape": [
+   4,
+   22,
+   22,
+   6,
+   6
+  ],
+  "core": "spectral.core",
+  "factors": [
+   {
+    "mode": 0,
+    "name": "spectral.factor0",
+    "shape": [
+     8,
+     4
+    ]
+   },
+   {
+    "mode": 1,
+    "name": "spectral.factor1",
+    "shape": [
+     48,
+     22
+    ]
+   },
+   {
+    "mode": 2,
+    "name": "spectral.factor2",
+    "shape": [
+     48,
+     22
+    ]
+   },
+   {
+    "mode": 3,
+    "name": "spectral.factor3",
+    "shape": [
+     12,
+     6
+    ]
+   },
+   {
+    "mode": 4,
+    "name": "spectral.factor4",
+    "shape": [
+     12,
+     6
+    ]
+   }
+  ],
+  "note": "full-rank modes folded into the core; apply the listed factors along their modes to rebuild [2L,in,out,my,mx]"
+ },
+ "features": {
+  "mddf_modes": [
+   2,
+   2,
+   2,
+   2
+  ],
+  "include_mddf_dc": true,
+  "use_building_input": true,
+  "coords": "all",
+  "channel_names": [
+   "upper_distance_dc",
+   "upper_distance_re1",
+   "upper_distance_re2",
+   "upper_distance_im1",
+   "upper_distance_im2",
+   "upper_relative_height_dc",
+   "upper_relative_height_re1",
+   "upper_relative_height_re2",
+   "upper_relative_height_im1",
+   "upper_relative_height_im2",
+   "lower_distance_dc",
+   "lower_distance_re1",
+   "lower_distance_re2",
+   "lower_distance_im1",
+   "lower_distance_im2",
+   "lower_relative_height_dc",
+   "lower_relative_height_re1",
+   "lower_relative_height_re2",
+   "lower_relative_height_im1",
+   "lower_relative_height_im2",
+   "solid",
+   "coord_y",
+   "coord_z",
+   "coord_x"
+  ],
+  "mddf_source_indices": [
+   0,
+   1,
+   2,
+   4,
+   5,
+   7,
+   8,
+   9,
+   11,
+   12,
+   14,
+   15,
+   16,
+   18,
+   19,
+   21,
+   22,
+   23,
+   25,
+   26
+  ],
+  "mddf_center": [
+   1450.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   3.66,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   796.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   -67.5,
+   0.0,
+   0.0,
+   0.0,
+   0.0
+  ],
+  "mddf_scale": [
+   1380.0,
+   395.0,
+   208.0,
+   395.0,
+   208.0,
+   33.8,
+   16.0,
+   10.4,
+   16.0,
+   10.4,
+   749.0,
+   385.0,
+   204.0,
+   385.0,
+   204.0,
+   122.0,
+   30.2,
+   18.4,
+   30.2,
+   18.4
+  ],
+  "mddf_imaginary_indices": [
+   3,
+   4,
+   8,
+   9,
+   13,
+   14,
+   18,
+   19
+  ]
+ },
+ "mddf": {
+  "angle_count": 180,
+  "distance_cutoff_m": 1600.0,
+  "modes_per_signal": 3,
+  "channels_per_signal": 7,
+  "signal_names": [
+   "upper_distance",
+   "upper_relative_height",
+   "lower_distance",
+   "lower_relative_height"
+  ],
+  "layout": "[DC, Re1..Re3, Im1..Im3] per signal, signal-major"
+ },
+ "grid": {
+  "horizontal_spacing_m": 4.0,
+  "vertical_spacing_m": 1.5
+ },
+ "wind": {
+  "reference_speed_m_s": 6.278,
+  "reference_definition": "mean streamwise speed on the inlet face at the top grid layer, averaged over the standard cities; the inflow is a sheared profile, so this is the gradient-height reference",
+  "scaling": "u,v,w scale with U/U_ref; TKE with (U/U_ref)^2; temperature does not scale"
+ },
+ "coordinates": {
+  "y_scale": 200.0,
+  "z_center": 70.0,
+  "z_scale": 70.0,
+  "x_center": 250.0,
+  "x_scale": 250.0
+ },
+ "target": {
+  "channel_names": [
+   "u",
+   "w",
+   "v",
+   "T",
+   "TKE"
+  ],
+  "center": [
+   4.0,
+   0.15,
+   0.0,
+   32.0,
+   0.8338136242091285
+  ],
+  "scale": [
+   2.2,
+   0.4,
+   0.5,
+   2.8,
+   0.8327797197057143
+  ],
+  "display_labels": [
+   "u",
+   "w",
+   "v",
+   "T",
+   "TKE"
+  ]
+ },
+ "inference": {
+  "patch": [
+   64,
+   64
+  ],
+  "overlap": 0.4,
+  "blend_window_minimum": 0.001
+ },
+ "tensors": {
+  "p.mlp1.weight": {
+   "offset": 0,
+   "shape": [
+    96,
+    24
+   ],
+   "count": 2304
+  },
+  "p.mlp1.bias": {
+   "offset": 4608,
+   "shape": [
+    96
+   ],
+   "count": 96
+  },
+  "p.mlp2.weight": {
+   "offset": 4800,
+   "shape": [
+    48,
+    96
+   ],
+   "count": 4608
+  },
+  "p.mlp2.bias": {
+   "offset": 14016,
+   "shape": [
+    48
+   ],
+   "count": 48
+  },
+  "mlp_layers.0.mlp1.weight": {
+   "offset": 14112,
+   "shape": [
+    192,
+    48
+   ],
+   "count": 9216
+  },
+  "mlp_layers.0.mlp1.bias": {
+   "offset": 32544,
+   "shape": [
+    192
+   ],
+   "count": 192
+  },
+  "mlp_layers.0.mlp2.weight": {
+   "offset": 32928,
+   "shape": [
+    48,
+    96
+   ],
+   "count": 4608
+  },
+  "mlp_layers.0.mlp2.bias": {
+   "offset": 42144,
+   "shape": [
+    48
+   ],
+   "count": 48
+  },
+  "mlp_layers.1.mlp1.weight": {
+   "offset": 42240,
+   "shape": [
+    192,
+    48
+   ],
+   "count": 9216
+  },
+  "mlp_layers.1.mlp1.bias": {
+   "offset": 60672,
+   "shape": [
+    192
+   ],
+   "count": 192
+  },
+  "mlp_layers.1.mlp2.weight": {
+   "offset": 61056,
+   "shape": [
+    48,
+    96
+   ],
+   "count": 4608
+  },
+  "mlp_layers.1.mlp2.bias": {
+   "offset": 70272,
+   "shape": [
+    48
+   ],
+   "count": 48
+  },
+  "mlp_layers.2.mlp1.weight": {
+   "offset": 70368,
+   "shape": [
+    192,
+    48
+   ],
+   "count": 9216
+  },
+  "mlp_layers.2.mlp1.bias": {
+   "offset": 88800,
+   "shape": [
+    192
+   ],
+   "count": 192
+  },
+  "mlp_layers.2.mlp2.weight": {
+   "offset": 89184,
+   "shape": [
+    48,
+    96
+   ],
+   "count": 4608
+  },
+  "mlp_layers.2.mlp2.bias": {
+   "offset": 98400,
+   "shape": [
+    48
+   ],
+   "count": 48
+  },
+  "mlp_layers.3.mlp1.weight": {
+   "offset": 98496,
+   "shape": [
+    192,
+    48
+   ],
+   "count": 9216
+  },
+  "mlp_layers.3.mlp1.bias": {
+   "offset": 116928,
+   "shape": [
+    192
+   ],
+   "count": 192
+  },
+  "mlp_layers.3.mlp2.weight": {
+   "offset": 117312,
+   "shape": [
+    48,
+    96
+   ],
+   "count": 4608
+  },
+  "mlp_layers.3.mlp2.bias": {
+   "offset": 126528,
+   "shape": [
+    48
+   ],
+   "count": 48
+  },
+  "w_layers.0.weight": {
+   "offset": 126624,
+   "shape": [
+    48,
+    48
+   ],
+   "count": 2304
+  },
+  "w_layers.0.bias": {
+   "offset": 131232,
+   "shape": [
+    48
+   ],
+   "count": 48
+  },
+  "w_layers.1.weight": {
+   "offset": 131328,
+   "shape": [
+    48,
+    48
+   ],
+   "count": 2304
+  },
+  "w_layers.1.bias": {
+   "offset": 135936,
+   "shape": [
+    48
+   ],
+   "count": 48
+  },
+  "w_layers.2.weight": {
+   "offset": 136032,
+   "shape": [
+    48,
+    48
+   ],
+   "count": 2304
+  },
+  "w_layers.2.bias": {
+   "offset": 140640,
+   "shape": [
+    48
+   ],
+   "count": 48
+  },
+  "w_layers.3.weight": {
+   "offset": 140736,
+   "shape": [
+    48,
+    48
+   ],
+   "count": 2304
+  },
+  "w_layers.3.bias": {
+   "offset": 145344,
+   "shape": [
+    48
+   ],
+   "count": 48
+  },
+  "q.mlp1.weight": {
+   "offset": 145440,
+   "shape": [
+    96,
+    48
+   ],
+   "count": 4608
+  },
+  "q.mlp1.bias": {
+   "offset": 154656,
+   "shape": [
+    96
+   ],
+   "count": 96
+  },
+  "q.mlp2.weight": {
+   "offset": 154848,
+   "shape": [
+    5,
+    96
+   ],
+   "count": 480
+  },
+  "q.mlp2.bias": {
+   "offset": 155808,
+   "shape": [
+    5
+   ],
+   "count": 5
+  },
+  "spectral.core.re": {
+   "offset": 155820,
+   "shape": [
+    4,
+    22,
+    22,
+    6,
+    6
+   ],
+   "count": 69696
+  },
+  "spectral.core.im": {
+   "offset": 295212,
+   "shape": [
+    4,
+    22,
+    22,
+    6,
+    6
+   ],
+   "count": 69696
+  },
+  "spectral.factor0.re": {
+   "offset": 434604,
+   "shape": [
+    8,
+    4
+   ],
+   "count": 32
+  },
+  "spectral.factor0.im": {
+   "offset": 434668,
+   "shape": [
+    8,
+    4
+   ],
+   "count": 32
+  },
+  "spectral.factor1.re": {
+   "offset": 434732,
+   "shape": [
+    48,
+    22
+   ],
+   "count": 1056
+  },
+  "spectral.factor1.im": {
+   "offset": 436844,
+   "shape": [
+    48,
+    22
+   ],
+   "count": 1056
+  },
+  "spectral.factor2.re": {
+   "offset": 438956,
+   "shape": [
+    48,
+    22
+   ],
+   "count": 1056
+  },
+  "spectral.factor2.im": {
+   "offset": 441068,
+   "shape": [
+    48,
+    22
+   ],
+   "count": 1056
+  },
+  "spectral.factor3.re": {
+   "offset": 443180,
+   "shape": [
+    12,
+    6
+   ],
+   "count": 72
+  },
+  "spectral.factor3.im": {
+   "offset": 443324,
+   "shape": [
+    12,
+    6
+   ],
+   "count": 72
+  },
+  "spectral.factor4.re": {
+   "offset": 443468,
+   "shape": [
+    12,
+    6
+   ],
+   "count": 72
+  },
+  "spectral.factor4.im": {
+   "offset": 443612,
+   "shape": [
+    12,
+    6
+   ],
+   "count": 72
+  }
+ },
+ "total_bytes": 443756
+}

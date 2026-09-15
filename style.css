@@ -1,0 +1,145 @@
+:root {
+  --bg: #0f1115;
+  --panel: #161a21;
+  --line: #262c36;
+  --text: #dfe4ea;
+  --muted: #8b95a3;
+  --accent: #64d2ff;
+  /* Every vertical dimension that could overflow the panel is tied to the
+     viewport height.  Measured budget: the panel needs ~745 px uncompressed
+     and ~575 px fully compressed, against ~990 px of content height on a
+     1080p screen and ~610 px on a maximised 720p one.  Below roughly 600 px
+     the panel scrolls, which is the agreed behaviour for extreme windows. */
+  --gap: clamp(12px, 2.3vh, 22px);
+  --pad: clamp(10px, 1.8vh, 18px);
+  --dial: clamp(96px, 19vh, 150px);
+  --control: clamp(26px, 3.6vh, 32px);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
+  font: 14px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+#app { display: flex; height: 100%; }
+
+/* Fixed block, not a scroll region: a stray wheel over the panel used to move
+   the controls out from under the pointer.  overflow-y is a bare safety net
+   for viewports shorter than the layout can compress to. */
+#panel {
+  width: 300px; flex: none; background: var(--panel); overflow-y: auto;
+  border-right: 1px solid var(--line); padding: var(--pad) 18px;
+}
+#panel header h1 { margin: 0; font-size: clamp(15px, 2.2vh, 20px);
+  letter-spacing: 0.14em; }
+/* Fixed height, clipped: the status text varies in length, and letting it
+   reflow would push everything below it down by a line at a time. */
+#status { margin: 3px 0 0; color: var(--muted); font-size: 12px;
+  height: 2.8em; overflow: hidden; }
+#panel section { margin-top: var(--gap); }
+#panel h2 { margin: 0 0 6px; font-size: 12px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--muted); font-weight: 600;
+  display: flex; align-items: baseline; justify-content: space-between; }
+/* The one place the cost of a group is stated in words rather than implied
+   by its position. */
+.tier { font-size: 10px; letter-spacing: 0.06em; text-transform: none;
+  color: #5d6674; border: 1px solid var(--line); border-radius: 4px;
+  padding: 0 5px; }
+
+select, input[type="number"], .upload {
+  background: #10141a; color: var(--text); border: 1px solid var(--line);
+  border-radius: 6px; padding: 0 8px; height: var(--control);
+  font: inherit; font-size: 13px;
+}
+select { width: 100%; min-width: 0; }
+.upload { display: flex; align-items: center; justify-content: center;
+  margin-top: 6px; cursor: pointer; font-size: 12.5px; }
+.upload:hover { border-color: var(--accent); color: var(--accent); }
+input.num { width: 56px; text-align: right; }
+input[type="number"]:focus, select:focus { outline: 1px solid var(--accent); }
+
+.row { display: flex; align-items: center; gap: 7px; margin-top: 6px; }
+.row.compact { margin-top: 6px; }
+.unit { color: var(--muted); font-size: 12px; white-space: nowrap; }
+.hint { color: var(--muted); font-size: 11.5px; margin: 6px 0 0;
+  height: 1.5em; overflow: hidden; text-overflow: ellipsis;
+  white-space: nowrap; }
+
+input[type="range"] { -webkit-appearance: none; appearance: none; flex: 1;
+  min-width: 0; height: 4px; background: var(--line); border-radius: 2px;
+  outline: none; }
+input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none;
+  width: 15px; height: 15px; border-radius: 50%; background: var(--accent);
+  cursor: pointer; border: none; }
+input[type="range"]::-moz-range-thumb { width: 15px; height: 15px; border: none;
+  border-radius: 50%; background: var(--accent); cursor: pointer; }
+
+/* One square cell per city.  The cell is square whatever the city is: the
+   thumbnail is drawn to fit inside it, so a map that is not square arrives
+   letterboxed rather than stretched.  At this size a per-tile size label is
+   unreadable, so the extent is carried by the tooltip, by the line under the
+   row, and above all by the scale bar in the scene. */
+.tiles { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; }
+.tiles button { padding: 0; border: 1px solid var(--line); border-radius: 5px;
+  background: #10141a; aspect-ratio: 1; cursor: pointer; overflow: hidden;
+  display: block; }
+.tiles button canvas { display: block; width: 100%; height: 100%; }
+.tiles button:hover { border-color: var(--accent); }
+.tiles button[aria-pressed="true"] { border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent) inset; }
+
+#dial { display: block; margin: 2px auto 0; cursor: grab;
+  width: var(--dial); height: var(--dial); touch-action: none; }
+#dial:active { cursor: grabbing; }
+
+.variables { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
+.variables button {
+  background: #10141a; border: 1px solid var(--line); color: var(--text);
+  border-radius: 6px; height: var(--control); padding: 0 2px;
+  font: inherit; font-size: 12px; cursor: pointer;
+}
+.variables button:hover { border-color: var(--accent); }
+.variables button[aria-pressed="true"] {
+  border-color: var(--accent); color: var(--accent); background: #12222c;
+}
+
+#stage { position: relative; flex: 1; min-width: 0; }
+#scene { display: block; width: 100%; height: 100%; }
+
+/* Scale bar, sitting directly above the colour bar: the right edge carries
+   the two things that say what the picture means, and nothing else. */
+#scalebar { position: absolute; right: 18px; bottom: 100px; width: 240px;
+  display: flex; flex-direction: column; align-items: flex-end; gap: 3px;
+  pointer-events: none; }
+#scalebar .bar { display: flex; height: 8px; border: 1px solid #aab3bf;
+  border-radius: 1px; overflow: hidden; background: rgba(16, 20, 26, 0.6); }
+#scalebar .bar i { display: block; height: 100%; flex: 1; }
+#scalebar .bar i:nth-child(odd) { background: #aab3bf; }
+#scale-label { color: #c2cad4; font-size: 11px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9); }
+
+#legend {
+  position: absolute; right: 18px; bottom: 18px; width: 240px;
+  background: rgba(16, 20, 26, 0.82); border: 1px solid var(--line);
+  border-radius: 10px; padding: 10px 12px; font-size: 12px;
+}
+#colorbar { display: block; width: 100%; height: 12px; border-radius: 3px;
+  margin: 6px 0 4px; }
+.legend-range { display: flex; justify-content: space-between;
+  color: var(--muted); font-size: 11px; }
+
+#busy { position: absolute; left: 50%; top: 22px; transform: translateX(-50%); }
+.spinner { width: 18px; height: 18px; border: 2px solid var(--line);
+  border-top-color: var(--accent); border-radius: 50%;
+  animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+#error {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  max-width: 520px; background: #2a1417; border: 1px solid #6d2b31;
+  color: #ffd9dc; padding: 16px 18px; border-radius: 10px; font-size: 13px;
+}
+
+/* Short viewports: the status line drops to one row.  Everything else is
+   already on a vh clamp. */
+@media (max-height: 780px) {
+  #status { height: 1.5em; }
+}
+

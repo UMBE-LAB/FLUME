@@ -1,0 +1,78 @@
+{
+ "encoding": {
+  "format": "PNG-8 grayscale",
+  "pixel_metres": 4.0,
+  "value": "building layer count",
+  "layer_metres": 1.5,
+  "maximum_value": 160,
+  "axes": "row = Y (cross-wind), column = X (streamwise); 0 degrees blows along +X"
+ },
+ "cities": [
+  {
+   "id": "case_20",
+   "label": "Test city 20",
+   "file": "city_20.png",
+   "shape": [
+    300,
+    300
+   ],
+   "maximum_height_m": 144.0,
+   "built_fraction": 0.17543333333333333
+  },
+  {
+   "id": "case_8",
+   "label": "Test city 8",
+   "file": "city_8.png",
+   "shape": [
+    300,
+    300
+   ],
+   "maximum_height_m": 193.5,
+   "built_fraction": 0.3634777777777778
+  },
+  {
+   "id": "case_12",
+   "label": "Test city 12",
+   "file": "city_12.png",
+   "shape": [
+    300,
+    300
+   ],
+   "maximum_height_m": 217.5,
+   "built_fraction": 0.2378222222222222
+  },
+  {
+   "id": "case_15",
+   "label": "Test city 15",
+   "file": "city_15.png",
+   "shape": [
+    300,
+    300
+   ],
+   "maximum_height_m": 147.0,
+   "built_fraction": 0.255
+  },
+  {
+   "id": "case_27",
+   "label": "Test city 27",
+   "file": "city_27.png",
+   "shape": [
+    300,
+    300
+   ],
+   "maximum_height_m": 240.0,
+   "built_fraction": 0.3352333333333333
+  },
+  {
+   "id": "case_302",
+   "label": "Test city 302",
+   "file": "city_302.png",
+   "shape": [
+    750,
+    750
+   ],
+   "maximum_height_m": 169.5,
+   "built_fraction": 0.2663768888888889
+  }
+ ]
+}

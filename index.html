@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FLUME · urban wind in the browser</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <!--
+    The panel is grouped by what an action costs, not by what it configures.
+
+      City & height   re-traces the MDDF and predicts   (seconds)
+      Wind            direction predicts; speed is free (a frame)
+      Display         never predicts                    (a frame)
+
+    That order is the only explanation the user gets, and it is enough: after
+    two or three actions the grouping has taught which controls are cheap.
+
+    The panel is a fixed block and must not scroll on a 1080p or 720p screen.
+    Nothing in it grows: progress detail goes to the browser console, and the
+    upload format is on the upload button's tooltip.
+  -->
+  <aside id="panel">
+    <header>
+      <h1>FLUME</h1>
+      <p id="status">starting…</p>
+    </header>
+
+    <section>
+      <h2>City &amp; height <span class="tier">recomputes</span></h2>
+      <div id="city-tiles" class="tiles"></div>
+      <label class="upload" for="city-upload"
+             title="PNG-8 grayscale, any size. One pixel = 4 m. Pixel value = number of 1.5 m building layers (0 = open ground, 160 max). Rows run along Y, columns along X; 0° wind blows along +X.">Upload a height map (PNG)</label>
+      <input id="city-upload" type="file" accept="image/png" hidden>
+      <div class="row">
+        <span class="unit">height</span>
+        <input id="height-range" type="range" min="0" max="159" step="1" value="26">
+        <input id="height-number" class="num" type="number" min="0" max="239" step="0.1" value="40">
+        <span class="unit">m</span>
+      </div>
+      <p class="hint" id="city-info"></p>
+    </section>
+
+    <section>
+      <h2>Wind</h2>
+      <canvas id="dial" width="200" height="200"></canvas>
+      <div class="row">
+        <span class="unit">from</span>
+        <input id="direction-number" class="num" type="number" min="-360" max="360" step="1" value="0">
+        <span class="unit">°</span>
+      </div>
+      <div class="row">
+        <span class="unit">speed</span>
+        <input id="speed-range" type="range" min="0.5" max="20" step="0.1" value="6.3">
+        <input id="speed-number" class="num" type="number" min="0.5" max="20" step="0.1" value="6.3">
+        <span class="unit">m/s</span>
+      </div>
+    </section>
+
+    <section>
+      <h2>Display</h2>
+      <div id="variables" class="variables"></div>
+      <div class="row">
+        <span class="unit">particles</span>
+        <select id="particles">
+          <option value="off">off</option>
+          <option value="white" selected>white, over the field</option>
+          <option value="tinted">coloured, no field</option>
+        </select>
+      </div>
+    </section>
+
+  </aside>
+
+  <main id="stage">
+    <canvas id="scene"></canvas>
+
+    <!--
+      A city two and a half times wider looks identical on screen once the camera has
+      refitted to it, so the only thing that can convey size is a bar measured
+      in metres.  It reads along screen X, which is horizontal and square to
+      the fixed viewing azimuth, so it is exact at the depth of the camera
+      target rather than merely indicative.
+    -->
+    <div id="scalebar">
+      <div class="bar"><i></i><i></i></div>
+      <span id="scale-label"></span>
+    </div>
+
+    <div id="legend">
+      <span id="legend-label"></span>
+      <canvas id="colorbar" width="220" height="12"></canvas>
+      <div class="legend-range"><span id="legend-low"></span><span id="legend-high"></span></div>
+    </div>
+
+    <div id="busy" hidden><div class="spinner"></div></div>
+    <div id="error" hidden></div>
+  </main>
+</div>
+<script>
+  // Diagnostics before any module runs: an exception that escapes the module
+  // graph would otherwise leave a silent black viewport.
+  window.__flumeError = function (text) {
+    var box = document.getElementById("error");
+    if (!box) return;
+    box.hidden = false;
+    box.textContent = (box.textContent ? box.textContent + "\n\n" : "") + text;
+  };
+  window.addEventListener("error", function (event) {
+    window.__flumeError("script error: " + event.message + "\n" +
+      (event.filename || "").split("/").pop() + ":" + event.lineno);
+  });
+  window.addEventListener("unhandledrejection", function (event) {
+    var reason = event.reason;
+    window.__flumeError("unhandled rejection: " +
+      ((reason && reason.stack) || reason));
+  });
+</script>
+<script type="module" src="src/main.js"></script>
+</body>
+</html>
