@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FLUME · urban wind in the browser</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <aside id="panel">
+    <header>
+      <div class="title-row">
+        <h1>FLUME</h1>
+        <button type="button" id="info-toggle" aria-label="About FLUME" aria-expanded="false" aria-controls="info">i</button>
+      </div>
+      <div id="info" hidden>
+        <p class="info-title">Fast localized urban microclimate emulator: wind and temperatures in unseen urban morphologies</p>
+        <p>Shaoxiang Qin, Theodore Potsis, Dongxue Zhan, Xue Liu, Ted Stathopoulos, Liangzhu Leon Wang</p>
+        <p>FLUME: a rapid, data-efficient, and geometry-aware framework based on a Fourier neural operator for predicting three-dimensional wind and temperature fields.</p>
+        <p><a href="https://arxiv.org/abs/2503.19708" target="_blank" rel="noopener">Read the paper on arXiv ↗</a></p>
+        <div class="info-credit">
+          <p>Developed and maintained by <a href="https://github.com/UMBE-LAB" target="_blank" rel="noopener">UMBE Lab</a><br>(Prof. Liangzhu Leon Wang)</p>
+          <p>Concordia University, Montreal, Canada</p>
+          <p>License: <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank" rel="noopener">Apache 2.0</a></p>
+        </div>
+      </div>
+      <p id="status">starting…</p>
+    </header>
+    <section>
+      <h2>City &amp; height <span class="tier">recomputes</span></h2>
+      <div id="city-tiles" class="tiles"></div>
+      <label class="upload" for="city-upload"
+             title="PNG-8 grayscale, up to 750 x 750 pixels (3 km). One pixel = 4 m. Pixel value = number of 1.5 m building layers (0 = open ground, 160 = 240 m; higher values are cut at 240 m). Rows run along Y, columns along X; 0° wind blows along +X.">Upload a height map (PNG)</label>
+      <input id="city-upload" type="file" accept="image/png" hidden>
+      <div class="row">
+        <span class="unit">height</span>
+        <input id="height-range" type="range" min="0" max="240" step="1" value="40">
+        <input id="height-number" class="num" type="number" min="0" max="240" step="1" value="40">
+        <span class="unit">m</span>
+      </div>
+      <p class="hint" id="city-info"></p>
+    </section>
+    <section>
+      <h2>Wind</h2>
+      <canvas id="dial" width="200" height="200"></canvas>
+      <div class="row">
+        <span class="unit">toward</span>
+        <input id="direction-number" class="num" type="number" min="-360" max="360" step="1" value="0">
+        <span class="unit">°</span>
+      </div>
+      <div class="row">
+        <span class="unit">speed</span>
+        <input id="speed-range" type="range" min="0.5" max="20" step="0.1" value="4">
+        <input id="speed-number" class="num" type="number" min="0.5" max="20" step="0.1" value="4.0">
+        <span class="unit">m/s</span>
+      </div>
+    </section>
+    <section>
+      <h2>Display</h2>
+      <div id="variables" class="variables"></div>
+      <div class="row">
+        <span class="unit">particles</span>
+        <select id="particles">
+          <option value="off">off</option>
+          <option value="white" selected>white, over the field</option>
+          <option value="tinted">coloured, no field</option>
+        </select>
+      </div>
+    </section>
+    <button type="button" id="download-toggle" aria-expanded="false">3D download</button>
+  </aside>
+  <main id="stage">
+    <canvas id="scene"></canvas>
+    <div id="scalebar">
+      <div class="bar"><i></i><i></i></div>
+      <span id="scale-label"></span>
+    </div>
+    <div id="legend">
+      <span id="legend-label"></span>
+      <canvas id="colorbar" width="220" height="12"></canvas>
+      <div class="legend-range"><span id="legend-low"></span><span id="legend-high"></span></div>
+    </div>
+    <div id="busy" hidden><div class="spinner"></div></div>
+    <div id="error" hidden></div>
+  </main>
+</div>
+<script type="module" src="src/main.js"></script>
+</body>
+</html>
